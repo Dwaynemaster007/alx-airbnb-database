@@ -1,7 +1,7 @@
 # ER Diagram and Database Design
 The ER diagram can be found [here](https://dbdiagram.io/d/ALX-AirBnB-Database-Schema-68ac4eea1e7a611967780902)
 
-!ERD/ALX AirBnB Database Schema.png
+![ERD/]ALX AirBnB Database Schema.png
 
 ## Objective
 The primary goal of this task was to design the database schema for an AirBnB-like application. This involved identifying the core entities, their attributes, and the relationships that exist between them.
