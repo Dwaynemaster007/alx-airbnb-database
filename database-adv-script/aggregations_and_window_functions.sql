@@ -10,12 +10,12 @@ ORDER BY
     total_bookings DESC;
 
 -- Query 2: Rank properties based on the total number of bookings using a window function.
--- This query uses RANK() to rank properties.
 SELECT
     p.id,
     p.name,
     COUNT(b.id) AS total_bookings,
-    RANK() OVER (ORDER BY COUNT(b.id) DESC) AS ranking
+    RANK() OVER (ORDER BY COUNT(b.id) DESC) AS rank_by_bookings,
+    ROW_NUMBER() OVER (ORDER BY COUNT(b.id) DESC) AS row_number_by_bookings
 FROM
     properties AS p
 LEFT JOIN
@@ -23,4 +23,4 @@ LEFT JOIN
 GROUP BY
     p.id, p.name
 ORDER BY
-    ranking;
+    total_bookings DESC;
