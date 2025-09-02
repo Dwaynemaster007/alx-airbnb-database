@@ -21,7 +21,9 @@ SELECT
 FROM
     properties AS p
 LEFT JOIN
-    reviews AS r ON p.id = r.property_id;
+    reviews AS r ON p.id = r.property_id
+ORDER BY
+    p.id;
 
 -- Query 3: FULL OUTER JOIN to retrieve all users and all bookings, even if the user has no booking or a booking is not linked to a user.
 -- Note: MySQL does not support FULL OUTER JOIN. This is a common workaround using UNION.
