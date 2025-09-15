@@ -45,6 +45,7 @@ alx-airbnb-database/
 └── .gitignore                         # Git exclusion rules
 ```
 ---
+
 ## 🚀 Core Database Features
 
 The schema is meticulously designed to support the following functionalities:
