@@ -60,11 +60,11 @@ The schema is meticulously designed to support the following functionalities:
 ---
 ## 💻 How to Run
 
-This database schema is compatible with **PostgreSQL**. You can use the following steps to set up and populate the database.
+The scripts are written for **PostgreSQL 13+** (they use `gen_random_uuid()`, `TIMESTAMPTZ`, `FULL OUTER JOIN` and declarative partitioning). You can use the following steps to set up and populate the database.
 
 1.  **Clone the Repository**
     ```bash
-    git clone [https://github.com/YOUR_USERNAME/alx-airbnb-database.git](https://github.com/YOUR_USERNAME/alx-airbnb-database.git)
+    git clone https://github.com/Dwaynemaster007/alx-airbnb-database.git
     cd alx-airbnb-database
     ```
 2.  **Create the Database**
@@ -75,6 +75,16 @@ This database schema is compatible with **PostgreSQL**. You can use the followin
     ```bash
     psql -d airbnb_clone -f database-script-0x01/schema.sql
     psql -d airbnb_clone -f database-script-0x02/seed.sql
+    ```
+    Both scripts can be run again safely.
+4.  **Run the Advanced Queries**
+    ```bash
+    psql -d airbnb_clone -f database-adv-script/joins_queries.sql
+    psql -d airbnb_clone -f database-adv-script/subqueries.sql
+    psql -d airbnb_clone -f database-adv-script/aggregations_and_window_functions.sql
+    psql -d airbnb_clone -f database-adv-script/database_index.sql
+    psql -d airbnb_clone -f database-adv-script/perfomance.sql
+    psql -d airbnb_clone -f database-adv-script/partitioning.sql
     ```
 
 ---

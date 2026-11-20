@@ -10,4 +10,4 @@ This document details the performance improvements achieved by adding indexes to
 
 **Sample Query:**
 ```sql
-EXPLAIN SELECT p.name, r.rating FROM properties AS p JOIN reviews AS r ON p.id = r.property_id WHERE r.rating > 4;
+EXPLAIN SELECT p.name, r.rating FROM properties AS p JOIN reviews AS r ON p.property_id = r.property_id WHERE r.rating > 4;

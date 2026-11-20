@@ -15,21 +15,21 @@ To monitor the performance of frequently used queries, identify bottlenecks, and
 
 ### **Initial Query Analysis**
 
-**Sample Query:** Find the top 5 most-reviewed properties in a specific city.
+**Sample Query:** Find the top 5 most-reviewed properties in a specific location.
 
 ```sql
 SELECT
     p.name,
-    p.city,
-    COUNT(r.id) AS review_count
+    p.location,
+    COUNT(r.review_id) AS review_count
 FROM
     properties AS p
 JOIN
-    reviews AS r ON p.id = r.property_id
+    reviews AS r ON p.property_id = r.property_id
 WHERE
-    p.city = 'New York'
+    p.location = 'New York, NY'
 GROUP BY
-    p.id
+    p.property_id
 ORDER BY
     review_count DESC
 LIMIT 5;

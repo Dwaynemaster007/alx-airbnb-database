@@ -1,42 +1,39 @@
--- Create the partitioned bookings table.
--- This example assumes a new table is being created.
+-- Range-partition bookings by start_date (PostgreSQL declarative partitioning).
+-- The partition key has to be part of the primary key.
+DROP TABLE IF EXISTS bookings_partitioned;
+
 CREATE TABLE bookings_partitioned (
-    id INT NOT NULL,
-    property_id INT NOT NULL,
-    user_id INT NOT NULL,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
-    price_per_night DECIMAL(10, 2),
-    total_price DECIMAL(10, 2),
-    status VARCHAR(50)
-)
-PARTITION BY RANGE (YEAR(start_date)) (
-    PARTITION p2023 VALUES LESS THAN (2024),
-    PARTITION p2024 VALUES LESS THAN (2025),
-    PARTITION p2025 VALUES LESS THAN (2026),
-    PARTITION pMax VALUES LESS THAN MAXVALUE
-);
+    booking_id  UUID NOT NULL,
+    property_id UUID NOT NULL REFERENCES properties (property_id),
+    user_id     UUID NOT NULL REFERENCES users (user_id),
+    start_date  DATE NOT NULL,
+    end_date    DATE NOT NULL,
+    total_price DECIMAL(10, 2) NOT NULL,
+    status      VARCHAR(10) NOT NULL,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (booking_id, start_date)
+) PARTITION BY RANGE (start_date);
 
--- Note: In a real-world scenario, you would need to migrate data from the original
--- bookings table into the new partitioned table.
+CREATE TABLE bookings_2023 PARTITION OF bookings_partitioned FOR VALUES FROM ('2023-01-01') TO ('2024-01-01');
+CREATE TABLE bookings_2024 PARTITION OF bookings_partitioned FOR VALUES FROM ('2024-01-01') TO ('2025-01-01');
+CREATE TABLE bookings_2025 PARTITION OF bookings_partitioned FOR VALUES FROM ('2025-01-01') TO ('2026-01-01');
+CREATE TABLE bookings_default PARTITION OF bookings_partitioned DEFAULT;
 
--- Test query on the partitioned table.
--- The database will only scan the relevant partition (e.g., p2024).
+CREATE INDEX ON bookings_partitioned (start_date);
+
+-- Copy the existing bookings in
+INSERT INTO bookings_partitioned
+SELECT booking_id, property_id, user_id, start_date, end_date, total_price, status, created_at
+FROM bookings;
+
+-- Only the bookings_2024 partition is scanned (look for it in the plan)
 EXPLAIN ANALYZE
-SELECT
-    *
-FROM
-    bookings_partitioned
-WHERE
-    start_date BETWEEN '2024-03-01' AND '2024-03-31';
+SELECT *
+FROM bookings_partitioned
+WHERE start_date BETWEEN '2024-03-01' AND '2024-03-31';
 
--- Test query without partitioning for comparison (simulated).
--- This would scan the entire table, demonstrating the performance benefit of partitioning.
--- You would run this on your original, unpartitioned table.
+-- The unpartitioned table, for comparison
 EXPLAIN ANALYZE
-SELECT
-    *
-FROM
-    bookings
-WHERE
-    start_date BETWEEN '2024-03-01' AND '2024-03-31';
+SELECT *
+FROM bookings
+WHERE start_date BETWEEN '2024-03-01' AND '2024-03-31';

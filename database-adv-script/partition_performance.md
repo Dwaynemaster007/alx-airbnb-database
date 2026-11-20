@@ -6,7 +6,7 @@ To implement table partitioning on the `bookings` table to improve the performan
 
 ### **Methodology**
 
-1.  The `bookings` table was partitioned using `RANGE` partitioning on the `start_date` column, with partitions created for each year (`p2023`, `p2024`, etc.).
+1.  The `bookings` table was partitioned using `RANGE` partitioning on the `start_date` column, with partitions created for each year (`bookings_2023`, `bookings_2024`, `bookings_2025`, plus a default partition).
 2.  A test query was designed to retrieve bookings within a specific date range.
 3.  The `EXPLAIN ANALYZE` command was used to measure and compare the performance of the test query on both an unpartitioned table (simulated) and the new partitioned table.
 
